@@ -21,6 +21,7 @@
 interface IProduct1 {
     void show();
 }
+
 interface IProduct2 {
     void show();
 }
@@ -30,6 +31,7 @@ class Product1 implements IProduct1 {
         System.out.println("this is product 1.");
     }
 }
+
 class Product2 implements IProduct2 {
     public void show() {
         System.out.println("this is product 2");
@@ -40,6 +42,7 @@ interface IFactory {
     IProduct1 createProduct1();
     IProduct2 createProduct2();
 }
+
 class Factory implements IFactory{
     public IProduct1 createProduct1() {
         return new Product1();
@@ -57,3 +60,7 @@ public class absfactory {
         factory.createProduct2().show();
     }
 }
+
+// out:
+// this is product 1.
+// this is product 2
