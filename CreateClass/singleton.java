@@ -61,6 +61,10 @@ class singleton {
      * 是否 Lazy 初始化：是
      * 优点：第一次调用才初始化，避免内存浪费。
      * 缺点：必须加锁 synchronized 才能保证单例，但加锁会影响效率。
+     * 以两个线程为例，假设pthread_1刚判断完 intance 为NULL 为真，准备创建实例的时候，切换到了pthread_2, 
+     * 此时pthread_2也判断intance为NULL为真，创建了一个实例，再切回pthread_1的时候继续创建一个实例返回，
+     * 那么此时就不再满足单例模式的要求了， 因为多线程访问出的问题，加锁使得线程同步；
+
      */
     private static singleton instance;
     //  让构造函数为 private，这样该类就不会被实例化
@@ -79,14 +83,14 @@ class singleton {
     }
 }
 
-// 3. 饿汉式
+// 3. 饿汉式 线程安全
 class singleton {
      /**
      * 是否 Lazy 初始化：否
      * 优点：没有加锁，执行效率会提高。
      * 缺点：类加载时就初始化，浪费内存。
      * 饿汉式在类加载的过程中就会创建一个本类的静态对象，所以它的加载过程比懒汉式慢，
-     * 但是获得类实例的过程比懒汉式快，并且它在多线程模式下比较安全。
+     * 但是获得类实例的过程比懒汉式快，并且它在多线程模式下比较安全,因为对象在使用前就已经创建出来了。
      */
     private static singleton instance = new singleton();
     //  让构造函数为 private，这样该类就不会被实例化
