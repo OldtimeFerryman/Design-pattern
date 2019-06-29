@@ -64,7 +64,6 @@ class singleton {
      * 以两个线程为例，假设pthread_1刚判断完 intance 为NULL 为真，准备创建实例的时候，切换到了pthread_2, 
      * 此时pthread_2也判断intance为NULL为真，创建了一个实例，再切回pthread_1的时候继续创建一个实例返回，
      * 那么此时就不再满足单例模式的要求了， 因为多线程访问出的问题，加锁使得线程同步；
-
      */
     private static singleton instance;
     //  让构造函数为 private，这样该类就不会被实例化
@@ -97,7 +96,7 @@ class singleton {
     private singleton (){}
 
     //  获取唯一可用的对象
-    public static synchronized singleton getInstance() {
+    public static singleton getInstance() {
         return instance;
     }
 
