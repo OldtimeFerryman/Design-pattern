@@ -64,6 +64,7 @@ class singleton {
      * 以两个线程为例，假设pthread_1刚判断完 intance 为NULL 为真，准备创建实例的时候，切换到了pthread_2, 
      * 此时pthread_2也判断intance为NULL为真，创建了一个实例，再切回pthread_1的时候继续创建一个实例返回，
      * 那么此时就不再满足单例模式的要求了， 因为多线程访问出的问题，加锁使得线程同步；
+     * 会导致很大的性能开销，并且加锁其实只需要在第一次初始化的时候用到，之后的调用都没必要再进行加锁。
      */
     private static singleton instance;
     //  让构造函数为 private，这样该类就不会被实例化
@@ -105,13 +106,54 @@ class singleton {
     }
 }
 
-public class SingletonPatternDemo {
-    public static void main(String[] args) {
+// 4. 双检锁/双重校验锁（DCL，即 double-checked locking）
+class singleton {
+    /**
+     * Volatile 变量具有 synchronized 的可见性特性，但是不具备原子特性。这就是说线程能够自动发现 volatile 变量的最新值。
+     * volatile的作用是作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值。
+     * 是否 Lazy 初始化：是
+     * 是否多线程安全：是
+     */
+    
+    // 加入关键字volatile。使用了volatile关键字后，重排序被禁止，所有的写（write）操作都将发生在读（read）操作之前。针对于key那一行
+    private volatile static singleton singleton;
+    private singleton (){}
 
-        //获取唯一可用的对象
-        singleton object = singleton.getInstance();
+    public static singleton getInstance() {
+        /**
+         * 执行双重检查是因为，如果多个线程同时了通过了第一次检查，并且其中一个线程首先通
+         * 过了第二次检查并实例化了对象，那么剩余通过了第一次检查的线程就不会再去实例化对象。
+         * 这样，除了初始化的时候会出现加锁的情况，后续的所有调用都会避免加锁而直接返回，
+         * 解决了性能消耗的问题。
+         */
+        if (singleton == null) {
+            synchronized (singleton.class) {
+                if (singleton == null) {
+                    /**
+                     * 此句实际上可以分解成以下三个步骤：         
+                     * 1. 分配内存空间 2. 初始化对象 3. 将对象指向刚分配的内存空间
+                     * 但是有些编译器为了性能的原因，可能会将第二步和第三步进行重排序，顺序就成了：               
+                     * 1. 分配内存空间 2. 将对象指向刚分配的内存空间 3. 初始化对象
+                     */
+                    singleton = new singleton(); // key
+                }
+            }
+        }
+        return singleton;
+    }
 
-        //显示消息
-        object.showMessage();
+    public void showMessage(){
+        System.out.println("This is a singleton instance!");
     }
 }
+
+// public class SingletonPatternDemo {
+//     public static void main(String[] args) {
+
+//         //获取唯一可用的对象
+//         singleton object = singleton.getInstance();
+
+//         //显示消息
+//         object.showMessage();
+//     }
+// }
