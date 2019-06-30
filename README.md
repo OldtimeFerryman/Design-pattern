@@ -29,7 +29,6 @@
 #### 结构型模式<br>这些设计模式关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。
 - 适配器模式（Adapter Pattern）
 - 桥接模式（Bridge Pattern）
-- 过滤器模式（Filter、Criteria Pattern）
 - 组合模式（Composite Pattern）
 - 装饰器模式（Decorator Pattern）
 - 外观模式（Facade Pattern）
@@ -44,7 +43,6 @@
 - 备忘录模式（Memento Pattern）
 - 观察者模式（Observer Pattern）
 - 状态模式（State Pattern）
-- 空对象模式（Null Object Pattern）
 - 策略模式（Strategy Pattern）
 - 模板模式（Template Pattern）
 - 访问者模式（Visitor Pattern）
