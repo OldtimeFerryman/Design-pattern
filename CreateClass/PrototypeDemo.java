@@ -49,6 +49,10 @@ abstract class Shape implements Cloneable {
     public Object clone() {
         Object clone = null;
         try {
+            /**
+            Object中的clone执行的时候使用了RTTI（run-time type identification）的机制,动态得找到目前正在调用clone方法的那个引用，
+            根据它的大小申请内存空间，然后进行字节大小的复制，将该对象的内存空间完全复制到新的空间中去，从而达到浅复制的目的。 
+            */
             clone = super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
