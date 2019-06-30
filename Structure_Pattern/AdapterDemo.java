@@ -22,7 +22,7 @@ class Audio{
     }
 }
 
-// 类适配器模式
+// 类适配器模式 继承被适配的类
 class adapter extends Audio implements USB {
     // Adapter
     @Override
@@ -33,7 +33,7 @@ class adapter extends Audio implements USB {
     }
 }
 
-//对象适配器类
+//对象适配器类 组合被适配的类，推荐这种模式
 class ObjectAdapter implements USB
 {
     private Audio audio;
